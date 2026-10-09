@@ -63,10 +63,10 @@
         const checks = [await renderTheme('autumn'), await renderTheme('winter')];
         const passed = checks.every(check => check.status === 'PASS');
         result.dataset.status = passed ? 'passed' : 'failed';
-        result.textContent = `${passed ? 'PASS' : 'FAIL'} — actual browser audio samples\n\n${JSON.stringify(checks, null, 2)}`;
+        result.textContent = `${passed ? 'PASS' : 'FAIL'} - actual browser audio samples\n\n${JSON.stringify(checks, null, 2)}`;
       } catch (error) {
         result.dataset.status = 'failed';
-        result.textContent = `FAIL — ${error.message}`;
+        result.textContent = `FAIL - ${error.message}`;
       } finally {
         button.disabled = false;
       }

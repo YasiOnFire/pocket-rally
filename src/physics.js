@@ -118,7 +118,7 @@ export class RallySimulation {
           this.z = obstacle.z + dz / divisor * (radius + 0.1);
           this.vx *= -0.18; this.vz *= -0.18;
           this.collisionCooldown = 0.8;
-          this.events.push({ type: 'collision', text: 'UWAŻAJ NA POBOCZE · R — POWRÓT NA TRASĘ' });
+          this.events.push({ type: 'collision', text: 'UWAŻAJ NA POBOCZE · R - POWRÓT NA TRASĘ' });
           break;
         }
       }

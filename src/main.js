@@ -125,7 +125,7 @@ function backToMenu() {
 function updateStagePresentation() {
   const winter = track.theme === 'winter';
   document.body.dataset.theme = track.theme;
-  document.title = `Pocket Rally — ${track.name}`;
+  document.title = `Pocket Rally - ${track.name}`;
   document.querySelectorAll('[data-stage-code]').forEach(el => { el.textContent = track.code; });
   document.querySelectorAll('[data-stage-name]').forEach(el => { el.textContent = track.name.toUpperCase(); });
   document.querySelectorAll('[data-stage-id]').forEach(el => { el.setAttribute('aria-pressed', String(el.dataset.stageId === track.id)); });
@@ -229,7 +229,7 @@ const pacenoteShape = (direction,severity) => {
 let lastPaceKey='';
 function updateHUD() {
   $('timer').textContent = formatTime(sim.totalTime);
-  $('best-time').textContent = Number.isFinite(best) ? formatTime(best) : '— — : — —';
+  $('best-time').textContent = Number.isFinite(best) ? formatTime(best) : '- - : - -';
   $('speed').textContent = String(Math.round(sim.speed*3.6)).padStart(3,'0');
   $('gear').textContent = sim.speed<0.4 ? 'N' : String(sim.gear);
   $('rpm-fill').style.width = `${Math.min(100,sim.rpm/7000*100)}%`;

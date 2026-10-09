@@ -36,8 +36,8 @@ Otwórz adres wypisany przez Vite. `npm run build` tworzy statyczną wersję w `
 
 W menu są dwa osobne oesy, każdy z trzema sektorami i własnym rekordem:
 
-- **Sosnowa Przełęcz — 2,685 km:** asfalt, luźny szuter i ziemia. Szuter mocniej zarzuca tyłem i wymaga kontrowania.
-- **Biała Grań — 2,389 km:** inny przebieg trasy, osiem odcinków śniegu, lodu i asfaltu. Śnieg ma mniejszą przyczepność, a lód najmniejszą oraz wyraźnie wydłużoną drogę hamowania.
+- **Sosnowa Przełęcz - 2,685 km:** asfalt, luźny szuter i ziemia. Szuter mocniej zarzuca tyłem i wymaga kontrowania.
+- **Biała Grań - 2,389 km:** inny przebieg trasy, osiem odcinków śniegu, lodu i asfaltu. Śnieg ma mniejszą przyczepność, a lód najmniejszą oraz wyraźnie wydłużoną drogę hamowania.
 
 Pobocze i zaspy spowalniają, drzewa i głazy mają kolizje. Podczas poślizgu obie tylne opony zostawiają ślady odpowiednie dla nawierzchni. Ślady mają ograniczony bufor geometrii i czyszczą się przy restarcie lub zmianie oesu; powrót auta na drogę nie łączy ich przez mapę.
 
@@ -72,3 +72,5 @@ To lekki prototyp o zręcznościowym modelu jazdy, z jednym samochodem i dwoma o
 Workflow `.github/workflows/pages.yml` po każdym pushu do `main` uruchamia testy, buduje grę i publikuje `dist/` w GitHub Pages. W ustawieniach repozytorium: **Settings → Pages → Source → GitHub Actions**.
 
 Gra działa w całości w przeglądarce i nie wymaga kluczy API, konta ani zewnętrznego backendu. Względne ścieżki buildu pozwalają uruchomić ją również w podkatalogu repozytorium.
+
+Vibe Coded with \</> by Yasio.dev
