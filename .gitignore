@@ -1,0 +1,11 @@
+node_modules/
+dist/
+artifacts/
+.openai/
+.sites-local/
+.env
+.env.*
+*.pem
+*.key
+*.log
+.DS_Store

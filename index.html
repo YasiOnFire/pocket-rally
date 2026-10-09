@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171e20" />
+    <meta name="description" content="Pocket Rally — dwa proceduralne oesy: jesienna przełęcz i zimowa grań. Poślizgi, ślady opon i muzyka 8-bit. Wszystko stworzone w kodzie." />
+    <title>Pocket Rally — Sosnowa Przełęcz</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <a class="brand" href="./" aria-label="Pocket Rally — strona główna">
+          <svg class="brand-flag" width="31" height="29" viewBox="0 0 31 29" aria-hidden="true"><path d="M1 1h3v27H1zM5 1h24v18H5z" fill="currentColor"/><path d="M5 1h6v6H5zm12 0h6v6h-6zM11 7h6v6h-6zm12 0h6v6h-6zM5 13h6v6H5zm12 0h6v6h-6z" fill="#171e20"/></svg>
+          <span>POCKET<span class="brand-light">RALLY</span><span class="brand-version">.04</span></span>
+        </a>
+        <div class="header-stage"><span class="tiny-tag" data-stage-code>OS 01</span><span data-stage-name>SOSNOWA PRZEŁĘCZ</span></div>
+        <div class="header-actions">
+          <button id="music-button" class="icon-button music-button" type="button" aria-label="Wyłącz muzykę 8-bit" title="Muzyka 8-bit (N)" aria-pressed="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 17V5l11-2v12M9 9l11-2" stroke="currentColor" stroke-width="1.7"/><ellipse cx="6" cy="18" rx="3" ry="2" fill="currentColor"/><ellipse cx="17" cy="16" rx="3" ry="2" fill="currentColor"/></svg></button>
+          <button id="sound-button" class="icon-button" type="button" aria-label="Wyłącz dźwięk" title="Dźwięk (M)" aria-pressed="false">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 4-6 5H3v6h3l6 5V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path class="sound-waves" d="M16 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+          </button>
+          <span class="action-divider"></span>
+          <button id="fullscreen-button" class="icon-button" type="button" aria-label="Przełącz pełny ekran" title="Pełny ekran">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5" stroke="currentColor" stroke-width="1.7"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section id="game-viewport" class="game-shell" aria-label="Odcinek specjalny — gra rajdowa">
+          <canvas id="game-canvas" aria-label="Trójwymiarowa trasa rajdowa. Sterowanie klawiaturą opisano pod grą."></canvas>
+          <div class="screen-vignette" aria-hidden="true"></div>
+          <div class="corner corner-tl" aria-hidden="true"></div><div class="corner corner-br" aria-hidden="true"></div>
+
+          <div class="hud hud-top">
+            <div class="stage-status"><span class="live-dot"></span><span id="stage-status">SHAKEDOWN</span><span class="status-divider">/</span><span data-stage-code>OS 01</span></div>
+            <div class="pace-note" aria-label="Komunikat pilota">
+              <div class="pace-icon" id="pace-arrow" aria-hidden="true">↑</div>
+              <div class="pace-copy"><span class="eyebrow">PILOT</span><strong id="pace-label">PROSTO</strong><span id="pace-distance">150 m</span></div>
+            </div>
+            <div class="timing"><span class="eyebrow">CZAS ODCINKA</span><div id="timer">00:00.000</div><div class="best-row">REKORD <span id="best-time">— — : — —</span></div><div id="penalty-value" role="status" aria-live="polite"></div></div>
+          </div>
+
+          <div class="hud hud-bottom">
+            <div class="map-panel"><div class="map-label"><span>TRASA</span><span id="map-stage-index">01 / 02</span></div><canvas id="minimap" width="180" height="180" aria-label="Mapa trasy i pozycja samochodu"></canvas><div class="map-progress"><span id="progress-fill"></span></div><div class="map-distance"><span>POSTĘP</span><span id="progress-text">0%</span></div></div>
+            <div class="speed-panel"><div class="speed-top"><span class="gear-caption">BIEG</span><span id="gear">N</span><div class="speed-readout"><span id="speed">000</span><span class="speed-unit">KM/H</span></div></div><div class="rpm-track"><span id="rpm-fill"></span></div><div class="rpm-label"><span>RPM</span><span>×1000</span></div></div>
+          </div>
+
+          <button id="pause-button" class="pause-button" type="button" aria-label="Pauza" title="Pauza (Esc)"><svg width="12" height="13" viewBox="0 0 12 13" aria-hidden="true"><path d="M1 1h3v11H1zm7 0h3v11H8z" fill="currentColor"/></svg><span>ESC</span></button>
+
+          <div id="menu-overlay" class="menu-overlay">
+            <div class="menu-content">
+              <div class="stage-selector" role="group" aria-label="Wybierz odcinek"><button type="button" class="stage-option" data-stage-id="pine-pass" aria-pressed="true"><span>OS 01 / JESIEŃ</span><strong>SOSNOWA PRZEŁĘCZ</strong></button><button type="button" class="stage-option" data-stage-id="frost-pass" aria-pressed="false"><span>OS 02 / ZIMA</span><strong>BIAŁA GRAŃ <span aria-hidden="true">✳</span></strong></button></div>
+              <div class="menu-eyebrow"><span class="orange-square"></span>DWA ODCINKI. PEŁNY GAZ.</div>
+              <h1 id="stage-title"><span>SOSNOWA</span>PRZEŁĘCZ<span class="title-period">.</span></h1>
+              <p id="stage-description" class="menu-description">Asfalt kończy się tam, gdzie zaczyna się zabawa. Patrz na komunikaty pilota, złap przyczepność i urwij jeszcze sekundę.</p>
+              <div class="stage-facts"><div><strong id="menu-length">2,68 KM</strong><span>DŁUGOŚĆ OS</span></div><div><strong>MIX<span class="fact-slash">/</span></strong><span id="menu-surfaces">ASFALT / SZUTER / ZIEMIA</span></div><div><strong id="menu-stage-index">01</strong><span>ODCINEK SPECJALNY</span></div></div>
+              <button id="start-button" class="primary-button" type="button" autofocus><span>NA START</span><svg width="24" height="18" viewBox="0 0 24 18" fill="none" aria-hidden="true"><path d="M1 9h20m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2"/></svg><kbd>ENTER</kbd></button>
+              <div class="menu-footnote"><span class="small-keyboard" aria-hidden="true">⌨</span> TYLKO TY, KLAWIATURA I CZAS.</div>
+            </div>
+            <div class="world-caption" aria-hidden="true"><span id="stage-weather">SUCHO / +14°C</span><strong id="stage-season">POŁUDNIE / JESIEŃ</strong><span class="caption-line"></span></div>
+          </div>
+
+          <div id="countdown" class="countdown hidden" role="status" aria-live="polite">3</div>
+          <div id="result-overlay" class="result-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="result-title">
+            <div class="result-card"><div class="menu-eyebrow"><span class="orange-square"></span>POCKET RALLY / <span data-stage-code>OS 01</span></div><h2 id="result-title">PAUZA</h2><p id="result-subtitle">Złap oddech. Przełęcz poczeka.</p><div id="result-time" class="result-time"></div><p id="result-detail" class="result-detail"></p><button id="resume-button" class="primary-button" type="button">WRACAM NA TRASĘ <span aria-hidden="true">→</span></button><button id="restart-button" class="secondary-button" type="button">ZACZNIJ OD NOWA <span aria-hidden="true">↻</span></button><button id="menu-button" class="secondary-button" type="button">WYBÓR ODCINKA <span aria-hidden="true">↗</span></button></div>
+          </div>
+          <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+        </section>
+
+        <section class="stage-ribbon" aria-label="Informacje o trasie">
+          <div class="ribbon-item"><span id="surface-icon" class="ribbon-number">01</span><div><span class="eyebrow">POD KOŁAMI</span><strong id="surface-name">ASFALT</strong></div><div class="surface-grip"><span class="grip-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span id="surface-detail">WYSOKA PRZYCZEPNOŚĆ</span></div></div>
+          <div class="ribbon-item"><svg class="mountain-icon" width="35" height="27" viewBox="0 0 35 27" fill="none" aria-hidden="true"><path d="m1 25 12-22 9 16 5-9 7 15H1Z" stroke="currentColor" stroke-width="1.5"/><path d="m9 11 4 3 3-4" stroke="currentColor" stroke-width="1.5"/></svg><div><span class="eyebrow" data-stage-name>SOSNOWA PRZEŁĘCZ</span><strong id="sector-label">SEKTOR 01 / 03</strong></div><span id="stage-distance" class="ribbon-distance">2,68 KM DO METY</span></div>
+          <div class="ribbon-item ribbon-hint"><span class="hint-symbol" aria-hidden="true">↗</span><div><span class="eyebrow">MAŁA PODPOWIEDŹ</span><p id="stage-hint">Zwolnij przed zakrętem. Gaz na wyjściu.</p></div></div>
+        </section>
+
+        <footer class="footer">
+          <div class="controls" aria-label="Sterowanie"><div class="control-item"><span class="direction-keys"><kbd>W</kbd><span><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span></span><span><strong>W · GAZ / S · HAMULEC + COFANIE</strong><span>A / D · skręt · lub klawisze strzałek</span></span></div><div class="control-item"><kbd>SPACJA</kbd><span>RĘCZNY</span></div><div class="control-item"><kbd>R</kbd><span>NA TRASĘ</span></div><div class="control-item"><kbd>C</kbd><span>KAMERA</span></div><div class="control-item"><kbd>M</kbd><span>DŹWIĘK</span></div><div class="control-item"><kbd>N</kbd><span>MUZYKA</span></div><div class="control-item"><kbd>ESC</kbd><span>PAUZA</span></div></div>
+          <div class="footer-signature">
+            <div class="footer-meta"><span class="pixel-spark" aria-hidden="true">✳</span><span>100% KODU.<br>0% ASSETÓW.</span></div>
+            <a class="author-credit" href="https://yasio.dev" target="_blank" rel="noopener noreferrer" aria-label="By Yasio — yasio.dev (otwiera nową kartę)">By <strong>Yasio</strong><span>yasio.dev ↗</span></a>
+          </div>
+        </footer>
+        <p class="keyboard-notice">Do jazdy potrzebujesz klawiatury. Wciśnij W lub ↑, żeby dodać gazu.</p>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

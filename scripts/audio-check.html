@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pocket Rally · procedural audio check</title>
+  <style>
+    body { max-width: 780px; margin: 56px auto; padding: 0 24px; background: #111b27; color: #e4ecd7; font: 16px/1.6 monospace; }
+    button { cursor: pointer; padding: 14px 22px; background: #d8f060; border: 0; color: #111b27; font: bold 16px monospace; }
+    button:disabled { opacity: .5; }
+    pre { white-space: pre-wrap; padding: 20px; background: #1c2a37; border-left: 3px solid #d8f060; }
+  </style>
+  <h1>Procedural music render check</h1>
+  <p>Renders the original autumn and winter themes using the browser's actual OfflineAudioContext. The engine is silent. No sound is played or downloaded.</p>
+  <button id="run">Render both themes</button>
+  <pre id="result" data-status="ready" aria-live="polite">Ready. This checks finite, nonzero music samples and headroom; it is not a listening test.</pre>
+  <script type="module">
+    import { RallyAudio } from '/src/audio.js';
+    const button = document.querySelector('#run');
+    const result = document.querySelector('#result');
+    async function renderTheme(theme) {
+      const winter = theme === 'winter';
+      const sampleRate = 22050;
+      const stepDuration = 60 / (winter ? 102 : 106) / 2;
+      const context = new OfflineAudioContext(1, Math.ceil((stepDuration * 64 + 1) * sampleRate), sampleRate);
+      const audio = new RallyAudio();
+      // Only this dedicated test fixture injects an offline context and schedules
+      // the complete score; production uses user activation and bounded look-ahead.
+      audio.context = context;
+      audio._buildGraph();
+      audio.music.gain.value = winter ? 0.1056 : 0.12;
+      audio._musicVoices[0].filter.frequency.value = winter ? 1000 : 1800;
+      audio._musicVoices[2].filter.frequency.value = winter ? 1100 : 1400;
+      for (let step = 0; step < 64; step++) audio._scheduleMusicStep(0.025 + step * stepDuration, stepDuration, winter);
+      try {
+        const buffer = await context.startRendering();
+        const samples = buffer.getChannelData(0);
+        let sumSquares = 0;
+        let peak = 0;
+        let nonfinite = 0;
+        for (const sample of samples) {
+          if (!Number.isFinite(sample)) { nonfinite++; continue; }
+          sumSquares += sample * sample;
+          peak = Math.max(peak, Math.abs(sample));
+        }
+        const rms = Math.sqrt(sumSquares / samples.length);
+        return {
+          theme, status: nonfinite === 0 && rms > 0.0001 && peak < 0.3 ? 'PASS' : 'FAIL',
+          durationSeconds: Number(buffer.duration.toFixed(3)), sampleFrames: samples.length,
+          rms: Number(rms.toFixed(7)), peak: Number(peak.toFixed(7)), nonfiniteSamples: nonfinite,
+          persistentMusicVoices: audio._musicVoices.length, engineGain: audio.engine.gain.value,
+        };
+      } finally {
+        // Offline contexts finish naturally and have no close() method.
+        audio.context = null;
+        audio.dispose();
+      }
+    }
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      result.dataset.status = 'running';
+      result.textContent = 'Rendering two eight-bar arrangements…';
+      try {
+        const checks = [await renderTheme('autumn'), await renderTheme('winter')];
+        const passed = checks.every(check => check.status === 'PASS');
+        result.dataset.status = passed ? 'passed' : 'failed';
+        result.textContent = `${passed ? 'PASS' : 'FAIL'} — actual browser audio samples\n\n${JSON.stringify(checks, null, 2)}`;
+      } catch (error) {
+        result.dataset.status = 'failed';
+        result.textContent = `FAIL — ${error.message}`;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</html>
